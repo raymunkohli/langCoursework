@@ -27,7 +27,21 @@ TOKEN : /* Define the Moopl tokens here. */
   < PROC: "proc" >
 | < FUN: "fun" >
 | < CLASS: "class" >
-
+| < RETURN: "return">
+| < ARRAYOF: "arrayof">
+| < BOOLEAN: "boolean">
+| < INT: "int">
+| < IF: "if">
+| < THEN: "then">
+| < ELSE: "else">
+| < WHILE: "while">
+| < DO: "do">
+| < OUTPUT: "output">
+| < LENGTH: "length">
+| < TRUE: "true">
+| < FALSE: "false">
+| < SELF: "self">
+| < NEW: "new">
 // LOTS OF TOKENS MISSING HERE!
 
 | < INTEGER_LITERAL: (["0"-"9"])+ >
@@ -45,6 +59,8 @@ public void testTokens() :
   ( ( ( t = <PROC>
       | t = <FUN>
       | t = <CLASS>
+      | t = <RETURN>
+      | t = <ARRAYOF>
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
       { System.out.println("Recognised as valid token: " + t.image); }
