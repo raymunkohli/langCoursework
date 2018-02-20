@@ -145,7 +145,7 @@
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x7f00,0x1f00,0x7f00,0x100,0x400,0x300,};
+      jj_la1_0 = new int[] {0x30001f00,0x1f00,0x30001f00,0x100,0x400,0x300,};
    }
 
   /** Constructor with InputStream. */
@@ -262,7 +262,7 @@
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[15];
+    boolean[] la1tokens = new boolean[31];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -276,7 +276,7 @@
         }
       }
     }
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 31; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

@@ -19,9 +19,41 @@ public interface MooplParserConstants {
   /** RegularExpression Id. */
   int ARRAYOF = 12;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 13;
+  int BOOLEAN = 13;
   /** RegularExpression Id. */
-  int ID = 14;
+  int INT = 14;
+  /** RegularExpression Id. */
+  int IF = 15;
+  /** RegularExpression Id. */
+  int THEN = 16;
+  /** RegularExpression Id. */
+  int ELSE = 17;
+  /** RegularExpression Id. */
+  int WHILE = 18;
+  /** RegularExpression Id. */
+  int DO = 19;
+  /** RegularExpression Id. */
+  int OUTPUT = 20;
+  /** RegularExpression Id. */
+  int LENGTH = 21;
+  /** RegularExpression Id. */
+  int TRUE = 22;
+  /** RegularExpression Id. */
+  int FALSE = 23;
+  /** RegularExpression Id. */
+  int SELF = 24;
+  /** RegularExpression Id. */
+  int NEW = 25;
+  /** RegularExpression Id. */
+  int OBJECT = 26;
+  /** RegularExpression Id. */
+  int ISNULL = 27;
+  /** RegularExpression Id. */
+  int INTEGER_LITERAL = 28;
+  /** RegularExpression Id. */
+  int ID = 29;
+  /** RegularExpression Id. */
+  int OP = 30;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -41,8 +73,24 @@ public interface MooplParserConstants {
     "\"class\"",
     "\"return\"",
     "\"arrayof\"",
+    "\"boolean\"",
+    "\"int\"",
+    "\"if\"",
+    "\"then\"",
+    "\"else\"",
+    "\"while\"",
+    "\"do\"",
+    "\"output\"",
+    "\"length\"",
+    "\"true\"",
+    "\"false\"",
+    "\"self\"",
+    "\"new\"",
+    "\"object\"",
+    "\"isnull\"",
     "<INTEGER_LITERAL>",
     "<ID>",
+    "<OP>",
   };
 
 }

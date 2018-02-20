@@ -42,10 +42,13 @@ TOKEN : /* Define the Moopl tokens here. */
 | < FALSE: "false">
 | < SELF: "self">
 | < NEW: "new">
+| < OBJECT: "object">
+| <ISNULL: "isnull"> 
 // LOTS OF TOKENS MISSING HERE!
 
 | < INTEGER_LITERAL: (["0"-"9"])+ >
 | < ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* >
+| < OP: "and"| "<"| "=="| "div"| "+"| "-"| "*">
 }
 
 /*
