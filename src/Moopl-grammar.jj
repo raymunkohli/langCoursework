@@ -79,7 +79,7 @@ public void testTokens() :
       | t = <NEW>
       | t = <OBJECT>
       | t = <ISNULL>
-//123 456
+//123 456 789
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
       { System.out.println("Recognised as valid token: " + t.image); }
