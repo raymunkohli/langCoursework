@@ -108,13 +108,16 @@ public void testTokens() :
 
       { System.out.println("Recognised as valid token: " + t.image); }
     )
-  | ( t = <INTEGER_LITERAL>
+  | ( 
+      t = <INTEGER_LITERAL>
       { System.out.println("Recognised as INTEGER_LITERAL: " + t.image); }
     )
-  | ( t = <OP>
+  | ( 
+      t = <OP>
       { System.out.println("Recognised as OP: " + t.image); }
     )
-  | ( t = <ID>
+  | ( 
+      t = <ID>
       { System.out.println("Recognised as ID: " + t.image); }
     )
   )*
