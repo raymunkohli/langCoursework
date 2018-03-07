@@ -79,6 +79,9 @@ public void testTokens() :
       | t = <NEW>
       | t = <OBJECT>
       | t = <ISNULL>
+      | t = <INTEGER_LITERAL>
+      | T = <ID>
+      | T = <OP>
 //123 456 789
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
@@ -108,7 +111,7 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
-  <CLASS> // TODO: ADD MISSING CASES
+  <CLASS><ID>< // TODO: ADD MISSING CASES
 }
 
 public void nt_MethodDecl() :

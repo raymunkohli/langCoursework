@@ -15,6 +15,21 @@
       case CLASS:
       case RETURN:
       case ARRAYOF:
+      case BOOLEAN:
+      case INT:
+      case IF:
+      case THEN:
+      case ELSE:
+      case WHILE:
+      case DO:
+      case OUTPUT:
+      case LENGTH:
+      case TRUE:
+      case FALSE:
+      case SELF:
+      case NEW:
+      case OBJECT:
+      case ISNULL:
       case INTEGER_LITERAL:
       case ID:
         ;
@@ -29,6 +44,21 @@
       case CLASS:
       case RETURN:
       case ARRAYOF:
+      case BOOLEAN:
+      case INT:
+      case IF:
+      case THEN:
+      case ELSE:
+      case WHILE:
+      case DO:
+      case OUTPUT:
+      case LENGTH:
+      case TRUE:
+      case FALSE:
+      case SELF:
+      case NEW:
+      case OBJECT:
+      case ISNULL:
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case PROC:
           t = jj_consume_token(PROC);
@@ -44,6 +74,51 @@
           break;
         case ARRAYOF:
           t = jj_consume_token(ARRAYOF);
+          break;
+        case BOOLEAN:
+          t = jj_consume_token(BOOLEAN);
+          break;
+        case INT:
+          t = jj_consume_token(INT);
+          break;
+        case IF:
+          t = jj_consume_token(IF);
+          break;
+        case THEN:
+          t = jj_consume_token(THEN);
+          break;
+        case ELSE:
+          t = jj_consume_token(ELSE);
+          break;
+        case WHILE:
+          t = jj_consume_token(WHILE);
+          break;
+        case DO:
+          t = jj_consume_token(DO);
+          break;
+        case OUTPUT:
+          t = jj_consume_token(OUTPUT);
+          break;
+        case LENGTH:
+          t = jj_consume_token(LENGTH);
+          break;
+        case TRUE:
+          t = jj_consume_token(TRUE);
+          break;
+        case FALSE:
+          t = jj_consume_token(FALSE);
+          break;
+        case SELF:
+          t = jj_consume_token(SELF);
+          break;
+        case NEW:
+          t = jj_consume_token(NEW);
+          break;
+        case OBJECT:
+          t = jj_consume_token(OBJECT);
+          break;
+        case ISNULL:
+          t = jj_consume_token(ISNULL);
           break;
         default:
           jj_la1[1] = jj_gen;
@@ -145,7 +220,7 @@
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x30001f00,0x1f00,0x30001f00,0x100,0x400,0x300,};
+      jj_la1_0 = new int[] {0x3fffff00,0xfffff00,0x3fffff00,0x100,0x400,0x300,};
    }
 
   /** Constructor with InputStream. */
