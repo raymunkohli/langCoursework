@@ -42,6 +42,7 @@
       case FSTOP:
       case INTEGER_LITERAL:
       case ID:
+      case OP:
         ;
         break;
       default:
@@ -181,6 +182,10 @@
         t = jj_consume_token(INTEGER_LITERAL);
         System.out.println("Recognised as INTEGER_LITERAL: " + t.image);
         break;
+      case OP:
+        t = jj_consume_token(OP);
+        System.out.println("Recognised as OP: " + t.image);
+        break;
       case ID:
         t = jj_consume_token(ID);
         System.out.println("Recognised as ID: " + t.image);
@@ -276,7 +281,7 @@
       jj_la1_0 = new int[] {0xffffff00,0xffffff00,0xffffff00,0x100,0x400,0x300,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0xff,0x3f,0xff,0x0,0x0,0x0,};
+      jj_la1_1 = new int[] {0x1ff,0x3f,0x1ff,0x0,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
