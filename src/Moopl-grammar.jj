@@ -11,7 +11,7 @@ PARSER_BEGIN(MooplParser)
   }
 PARSER_END(MooplParser)
 
-SKIP : /* Define white-space and comments here */
+SKIP : 
 {
     " "
   | "\t"
@@ -22,11 +22,12 @@ SKIP : /* Define white-space and comments here */
   | <"/*" (~["*"])* "*" ("*" | (~["*","/"] (~["*"])* "*"))* "/">
 }
 
-TOKEN : /* Define the Moopl tokens here. */
+TOKEN :
 {
   < PROC: "proc" >
 | < FUN: "fun" >
 | < CLASS: "class" >
+| < EXTENDS : "extends">
 | < RETURN: "return">
 | < ARRAYOF: "arrayof">
 | < BOOLEAN: "boolean">
@@ -43,8 +44,8 @@ TOKEN : /* Define the Moopl tokens here. */
 | < SELF: "self">
 | < NEW: "new">
 | < OBJECT: "object">
-| <ISNULL: "isnull"> 
-// LOTS OF TOKENS MISSING HERE!
+| < ISNULL: "isnull"> 
+
 
 | < INTEGER_LITERAL: (["0"-"9"])+ >
 | < ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* >
@@ -52,6 +53,13 @@ TOKEN : /* Define the Moopl tokens here. */
 
 | <OPENCBR : "{">
 | <CLOSECBR : "}">
+| <OPENB :"(">
+| <CLOSEB : ")">
+| <COMMA : ",">
+| <OPENSBR : "[">
+| <CLOSESBR :"]">
+| <EXPMARK : "!">
+| <FSTOP : ".">
 }
 
 /*
@@ -66,6 +74,7 @@ public void testTokens() :
       | t = <FUN>
       | t = <CLASS>
       | t = <RETURN>
+      | t = <EXTENDS>
       | t = <ARRAYOF>
       | t = <BOOLEAN>
       | t = <INT>
@@ -82,11 +91,23 @@ public void testTokens() :
       | t = <NEW>
       | t = <OBJECT>
       | t = <ISNULL>
+      
       | t = <INTEGER_LITERAL>
       | t = <ID>
       | t = <OP>
+
+
       | t = <OPENCBR>
       | t = <CLOSECBR>
+      | t = <OPENB>
+      | t = <CLOSEB>
+      | t = <COMMA>
+      | t = <OPENSBR>
+      | t = <CLOSESBR>
+      | t = <EXPMARK>
+      | t = <FSTOP>
+
+
 //123 456 789
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
