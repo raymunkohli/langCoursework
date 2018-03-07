@@ -85,6 +85,8 @@ public void testTokens() :
       | t = <INTEGER_LITERAL>
       | t = <ID>
       | t = <OP>
+      | t = <OPENCBR>
+      | t = <CLOSECBR>
 //123 456 789
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
@@ -114,7 +116,7 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
-  <CLASS><ID>< // TODO: ADD MISSING CASES
+  <CLASS><ID><OPENCBR>< // TODO: ADD MISSING CASES
 }
 
 public void nt_MethodDecl() :
