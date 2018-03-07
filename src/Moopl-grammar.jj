@@ -54,6 +54,7 @@ TOKEN :
 | <CLOSESBR :"]">
 | <EXPMARK : "!">
 | <FSTOP : ".">
+| <SEMI : ";">
 
 
 
@@ -102,6 +103,7 @@ public void testTokens() :
       | t = <CLOSESBR>
       | t = <EXPMARK>
       | t = <FSTOP>
+      | t = <SEMI>
       )
 
       { System.out.println("Recognised as valid token: " + t.image); }
@@ -133,7 +135,21 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
-  <CLASS><ID> // TODO: ADD MISSING CASES
+  <CLASS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+  |<CLASS> <ID> <EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+}
+
+public void nt_FieldDecl() :
+{}
+{ 
+   (nt_Type()) <ID> <SEMI>
+}
+public void nt_Type() :
+{}
+{ 
+  <ARRAYOF><OPENB>(nt_Type())<CLOSEB>
+  |<BOOLEAN> 
+  |<INT>
 }
 
 public void nt_MethodDecl() :

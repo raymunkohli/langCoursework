@@ -69,11 +69,13 @@ public interface MooplParserConstants {
   /** RegularExpression Id. */
   int FSTOP = 37;
   /** RegularExpression Id. */
-  int INTEGER_LITERAL = 38;
+  int SEMI = 38;
   /** RegularExpression Id. */
-  int ID = 39;
+  int INTEGER_LITERAL = 39;
   /** RegularExpression Id. */
   int OP = 40;
+  /** RegularExpression Id. */
+  int ID = 41;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -118,9 +120,10 @@ public interface MooplParserConstants {
     "\"]\"",
     "\"!\"",
     "\".\"",
+    "\";\"",
     "<INTEGER_LITERAL>",
-    "<ID>",
     "<OP>",
+    "<ID>",
   };
 
 }
