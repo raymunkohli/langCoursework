@@ -13,6 +13,7 @@
       case PROC:
       case FUN:
       case CLASS:
+      case EXTENDS:
       case RETURN:
       case ARRAYOF:
       case BOOLEAN:
@@ -30,6 +31,15 @@
       case NEW:
       case OBJECT:
       case ISNULL:
+      case OPENCBR:
+      case CLOSECBR:
+      case OPENB:
+      case CLOSEB:
+      case COMMA:
+      case OPENSBR:
+      case CLOSESBR:
+      case EXPMARK:
+      case FSTOP:
       case INTEGER_LITERAL:
       case ID:
         ;
@@ -42,6 +52,7 @@
       case PROC:
       case FUN:
       case CLASS:
+      case EXTENDS:
       case RETURN:
       case ARRAYOF:
       case BOOLEAN:
@@ -59,6 +70,15 @@
       case NEW:
       case OBJECT:
       case ISNULL:
+      case OPENCBR:
+      case CLOSECBR:
+      case OPENB:
+      case CLOSEB:
+      case COMMA:
+      case OPENSBR:
+      case CLOSESBR:
+      case EXPMARK:
+      case FSTOP:
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
         case PROC:
           t = jj_consume_token(PROC);
@@ -71,6 +91,9 @@
           break;
         case RETURN:
           t = jj_consume_token(RETURN);
+          break;
+        case EXTENDS:
+          t = jj_consume_token(EXTENDS);
           break;
         case ARRAYOF:
           t = jj_consume_token(ARRAYOF);
@@ -119,6 +142,33 @@
           break;
         case ISNULL:
           t = jj_consume_token(ISNULL);
+          break;
+        case OPENCBR:
+          t = jj_consume_token(OPENCBR);
+          break;
+        case CLOSECBR:
+          t = jj_consume_token(CLOSECBR);
+          break;
+        case OPENB:
+          t = jj_consume_token(OPENB);
+          break;
+        case CLOSEB:
+          t = jj_consume_token(CLOSEB);
+          break;
+        case COMMA:
+          t = jj_consume_token(COMMA);
+          break;
+        case OPENSBR:
+          t = jj_consume_token(OPENSBR);
+          break;
+        case CLOSESBR:
+          t = jj_consume_token(CLOSESBR);
+          break;
+        case EXPMARK:
+          t = jj_consume_token(EXPMARK);
+          break;
+        case FSTOP:
+          t = jj_consume_token(FSTOP);
           break;
         default:
           jj_la1[1] = jj_gen;
@@ -172,6 +222,7 @@
 
   final public void nt_ClassDecl() throws ParseException {
     jj_consume_token(CLASS);
+    jj_consume_token(ID);
   }
 
   final public void nt_MethodDecl() throws ParseException {
@@ -216,11 +267,16 @@
   private int jj_gen;
   final private int[] jj_la1 = new int[6];
   static private int[] jj_la1_0;
+  static private int[] jj_la1_1;
   static {
       jj_la1_init_0();
+      jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x3fffff00,0xfffff00,0x3fffff00,0x100,0x400,0x300,};
+      jj_la1_0 = new int[] {0xffffff00,0xffffff00,0xffffff00,0x100,0x400,0x300,};
+   }
+   private static void jj_la1_init_1() {
+      jj_la1_1 = new int[] {0xff,0x3f,0xff,0x0,0x0,0x0,};
    }
 
   /** Constructor with InputStream. */
@@ -337,7 +393,7 @@
   /** Generate ParseException. */
   public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[31];
+    boolean[] la1tokens = new boolean[41];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -348,10 +404,13 @@
           if ((jj_la1_0[i] & (1<<j)) != 0) {
             la1tokens[j] = true;
           }
+          if ((jj_la1_1[i] & (1<<j)) != 0) {
+            la1tokens[32+j] = true;
+          }
         }
       }
     }
-    for (int i = 0; i < 31; i++) {
+    for (int i = 0; i < 41; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;
