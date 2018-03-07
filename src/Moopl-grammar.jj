@@ -49,6 +49,9 @@ TOKEN : /* Define the Moopl tokens here. */
 | < INTEGER_LITERAL: (["0"-"9"])+ >
 | < ID: ["a"-"z","A"-"Z"](["a"-"z","A"-"Z","0"-"9","_"])* >
 | < OP: "and"| "<"| "=="| "div"| "+"| "-"| "*">
+
+| <OPENCBR : "{">
+| <CLOSECBR : "}">
 }
 
 /*
@@ -80,8 +83,8 @@ public void testTokens() :
       | t = <OBJECT>
       | t = <ISNULL>
       | t = <INTEGER_LITERAL>
-      | T = <ID>
-      | T = <OP>
+      | t = <ID>
+      | t = <OP>
 //123 456 789
         // ADD YOUR OWN TOKENS HERE AS YOU DEFINE EACH ONE
       )
