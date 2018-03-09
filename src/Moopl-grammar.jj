@@ -138,8 +138,10 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
-  <CLASS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
-  |<CLASS> <ID> <EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+  LOOKAHEAD(3)
+  <CLASS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR> 
+  | 
+  <CLASS> <ID> <EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
 }
 
 public void nt_FieldDecl() :
