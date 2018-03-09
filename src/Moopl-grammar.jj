@@ -169,26 +169,26 @@ public void nt_MethodDecl() :
 public void nt_ProcDecl() :
 {}
 {
-  <PROC><ID><OPENB> nt_FormalList() <CLOSEB><OPENCBR> (nt_Statement())* <CLOSECBR>  // TODO: ADD MISSING CASES
+  <PROC><ID><OPENB> nt_FormalList() <CLOSEB><OPENCBR> (nt_Statement())* <CLOSECBR>  
 }
 
 
 public void nt_FunDecl() :
 {}
 {
-  <FUN> // TODO: ADD MISSING CASES
+  <FUN> nt_Type() <ID> <OPENB> nt_FormalList() <CLOSEB> <OPENCBR> (nt_Statement())* <RETURN> nt_Exp() <SEMI> <CLOSECBR>
 }
 
 public void nt_FormalList() :
 {}
 {
-
+  nt_Type() <ID> (nt_FormalRest())*
 }
 
 public void nt_FormalRest() :
 {}
 {
-
+  <COMMA> nt_Type() <ID>
 }
 
 
@@ -203,17 +203,38 @@ public void nt_Type() :
 public void nt_Statement():
 {}
 {
-
+  (nt_Block()) |
+  (nt_Type() <ID> <SEMI>) |
+  (<IF> <OPENB> nt_Exp() <CLOSEB> <THEN> nt_Block() <ELSE> nt_Block()) |
+  (<WHILE> <OPENB> nt_Exp() <CLOSEB> <DO> nt_Block())|
+  (<OUTPUT> nt_Exp() <SEMI>)|
+  (nt_PrimaryExp()  
+    (( <OPENSBR> nt_Exp() <CLOSESBR> <OP> nt_Exp() <SEMI> )|
+    (<FSTOP> <ID> <OPENB> nt_ExpList() <CLOSEB> <COMMA>)|
+    (<OP> nt_Exp() <SEMI>))
+    )
 }
 
 public void nt_Block() :
 {}
 {
-
+  <OPENCBR> (nt_Statement())* <CLOSECBR>
 }
+
+
 public void nt_Exp() :
 {}
 {
+(nt_PrimaryExp()
+  (<OP> nt_PrimaryExp()|
+  (<OPENSBR> nt_Exp() <CLOSESBR>)|
+    (<FSTOP>
+      (<LENGTH>|
+      (<ID> <OPENB> nt_ExpList() <CLOSEB>)
+      )
+    )
+  )
+)
 
 }
 
@@ -221,25 +242,37 @@ public void nt_Exp() :
 public void nt_PrimaryExp() :
 {}
 {
-  <INTEGER_LITERAL>
+  (<INTEGER_LITERAL>)|
+  (<TRUE>)|
+  (<FALSE>)|
+  (nt_Var())|
+  (<SELF>)|
+  (<NEW>
+    ((<ARRAYOF><OPENB>nt_Type()<CLOSEB><OPENSBR>nt_Exp()<CLOSESBR>)|
+    (<OBJECT><ID><OPENB>nt_ExpList()<CLOSEB>))
+  )|
+  (<EXPMARK> nt_PrimaryExp())|
+  (<ISNULL> nt_PrimaryExp())|
+  (<OPENB> nt_Exp() <CLOSEB>)
+
 }
 
 public void nt_Var() :
 {}
 {
-
+  <ID>
 }
 
 public void nt_ExpList() :
 {}
 {
-
+  (nt_ExpRest() (nt_ExpRest())*)?
 }
 
 public void nt_ExpRest() :
 {}
 {
-
+  <COMMA> nt_Exp()
 }
 
 public void eof() :
