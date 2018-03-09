@@ -138,10 +138,18 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
-  LOOKAHEAD(3)
-  <CLASS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR> 
+ 
+  <CLASS> <ID>
+  ((<OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>)
   | 
-  <CLASS> <ID> <EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+  (<EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>))
+
+  /* example with lookahead
+  LOOKAHEAD(2)
+  <CLASS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+  | 
+  <CLASS> <ID><EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>
+  */
 }
 
 public void nt_FieldDecl() :
@@ -149,6 +157,41 @@ public void nt_FieldDecl() :
 { 
    (nt_Type()) <ID> <SEMI>
 }
+
+
+public void nt_MethodDecl() :
+{}
+{
+    nt_ProcDecl() | nt_FunDecl()
+}
+
+
+public void nt_ProcDecl() :
+{}
+{
+  <PROC><ID><OPENB> nt_FormalList() <CLOSEB><OPENCBR> (nt_Statement())* <CLOSECBR>  // TODO: ADD MISSING CASES
+}
+
+
+public void nt_FunDecl() :
+{}
+{
+  <FUN> // TODO: ADD MISSING CASES
+}
+
+public void nt_FormalList() :
+{}
+{
+
+}
+
+public void nt_FormalRest() :
+{}
+{
+
+}
+
+
 public void nt_Type() :
 {}
 { 
@@ -157,31 +200,47 @@ public void nt_Type() :
   |<INT>
 }
 
-public void nt_MethodDecl() :
+public void nt_Statement():
 {}
 {
-    nt_ProcDecl() | nt_FunDecl()
+
 }
 
-public void nt_FunDecl() :
+public void nt_Block() :
 {}
 {
-  <FUN> // TODO: ADD MISSING CASES
+
+}
+public void nt_Exp() :
+{}
+{
+
 }
 
-public void nt_ProcDecl() :
-{}
-{
-  <PROC> // TODO: ADD MISSING CASES
-}
 
 public void nt_PrimaryExp() :
 {}
 {
-  <INTEGER_LITERAL> // TODO: ADD MISSING CASES
+  <INTEGER_LITERAL>
 }
 
-// TODO: ADD MISSING NON_TERMINALS
+public void nt_Var() :
+{}
+{
+
+}
+
+public void nt_ExpList() :
+{}
+{
+
+}
+
+public void nt_ExpRest() :
+{}
+{
+
+}
 
 public void eof() :
 {}
