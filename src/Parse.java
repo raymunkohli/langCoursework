@@ -20,7 +20,7 @@ public class Parse {
         }
         System.out.print("parsing...");
         System.out.flush();
-        parser.nt_Program();
+        parser.nt_PrimaryExp();
         parser.eof();
         System.out.println("...parse completed.");
     }
