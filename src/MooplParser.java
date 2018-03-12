@@ -597,13 +597,16 @@
     }
   }
 
-  final public void nt_PrimaryExp() throws ParseException {
+  final public Exp nt_PrimaryExp() throws ParseException {
+  Token t;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case INTEGER_LITERAL:
-      jj_consume_token(INTEGER_LITERAL);
+      t = jj_consume_token(INTEGER_LITERAL);
+                          {if (true) return new ExpInteger(Integer.parseInt(t.image));}
       break;
     case TRUE:
-      jj_consume_token(TRUE);
+      t = jj_consume_token(TRUE);
+               {if (true) return new ExpTrue();}
       break;
     case FALSE:
       jj_consume_token(FALSE);
@@ -657,10 +660,14 @@
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
-  final public void nt_Var() throws ParseException {
-    jj_consume_token(ID);
+  final public Var nt_Var() throws ParseException {
+  Token t;
+    t = jj_consume_token(ID);
+             {if (true) return new Var(t.image);}
+    throw new Error("Missing return statement in function");
   }
 
   final public void nt_ExpList() throws ParseException {

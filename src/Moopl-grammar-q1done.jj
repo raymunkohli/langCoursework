@@ -192,12 +192,15 @@ public void nt_FormalRest() :
 }
 
 
-public void nt_Type() :
-{}
+public Type nt_Type() :
+{
+  Token t;
+  
+}
 { 
-  <ARRAYOF><OPENB>(nt_Type())<CLOSEB>
-  |<BOOLEAN> 
-  |<INT>
+  <ARRAYOF><OPENB>(t = nt_Type() {return new TypeArray(t.)})<CLOSEB>
+  |t = <BOOLEAN> {return new TypeBoolean(); } 
+  |t = <INT> { return new TypeInt();}
 }
 
 public void nt_Statement():
@@ -239,14 +242,16 @@ public void nt_Exp() :
 }
 
 
-public void nt_PrimaryExp() :
-{}
+public Exp nt_PrimaryExp() :
 {
-  (<INTEGER_LITERAL>)|
-  (<TRUE>)|
-  (<FALSE>)|
+  Token t; 
+}
+{
+  (t = <INTEGER_LITERAL> {return new ExpInteger(Integer.parseInt(t.image));})|
+  (t = <TRUE> {return new ExpTrue();} )|
+  (t = <FALSE> {return new ExpFalse();})|
   (nt_Var())|
-  (<SELF>)|
+  (t = <SELF>{return new ExpSelf()})|
   (<NEW>
     ((<ARRAYOF><OPENB>nt_Type()<CLOSEB><OPENSBR>nt_Exp()<CLOSESBR>)|
     (<OBJECT><ID><OPENB>nt_ExpList()<CLOSEB>))
@@ -257,10 +262,13 @@ public void nt_PrimaryExp() :
 
 }
 
-public void nt_Var() :
-{}
+public Var nt_Var() :
 {
-  <ID>
+  Token t;
+}
+ 
+{
+  t = <ID> { return new Var(t.image);}
 }
 
 public void nt_ExpList() :
