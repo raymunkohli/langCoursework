@@ -203,10 +203,15 @@
     }
   }
 
-  final public void nt_Program() throws ParseException {
+  final public Program nt_Program() throws ParseException {
+  ProcDecl a;
+  ClassDecl b;
+  List<ProcDecl> al;
+  List<ClassDecl> bl;
     label_2:
     while (true) {
-      nt_ProcDecl();
+      a = nt_ProcDecl();
+                     al.add(a);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case PROC:
         ;
@@ -226,13 +231,22 @@
         jj_la1[4] = jj_gen;
         break label_3;
       }
-      nt_ClassDecl();
+      b = nt_ClassDecl();
+                                                        bl.add(b);
     }
+   {if (true) return new Program(al,bl);}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void nt_ClassDecl() throws ParseException {
+  final public ClassDecl nt_ClassDecl() throws ParseException {
+  String variable1;
+  String variable2;
+  FieldDecl a;
+  MethodDecl b;
+  List<FieldDecl> al;
+  List<MethodDecl> bl;
     jj_consume_token(CLASS);
-    jj_consume_token(ID);
+    variable1 = jj_consume_token(ID);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case OPENCBR:
       jj_consume_token(OPENCBR);
@@ -248,7 +262,8 @@
           jj_la1[5] = jj_gen;
           break label_4;
         }
-        nt_FieldDecl();
+        a = nt_FieldDecl();
+                                    al.add(a);
       }
       label_5:
       while (true) {
@@ -261,13 +276,15 @@
           jj_la1[6] = jj_gen;
           break label_5;
         }
-        nt_MethodDecl();
+        b = nt_MethodDecl();
+                                                                          bl.add(b);
       }
       jj_consume_token(CLOSECBR);
+   {if (true) return new ClassDeclSimple(variable1,al,bl);}
       break;
     case EXTENDS:
       jj_consume_token(EXTENDS);
-      jj_consume_token(ID);
+      variable2 = jj_consume_token(ID);
       jj_consume_token(OPENCBR);
       label_6:
       while (true) {
@@ -281,7 +298,8 @@
           jj_la1[7] = jj_gen;
           break label_6;
         }
-        nt_FieldDecl();
+        a = nt_FieldDecl();
+                                                              al.add(a);
       }
       label_7:
       while (true) {
@@ -294,21 +312,27 @@
           jj_la1[8] = jj_gen;
           break label_7;
         }
-        nt_MethodDecl();
+        b = nt_MethodDecl();
+                                                                                                 bl.add(b);
       }
       jj_consume_token(CLOSECBR);
+   {if (true) return new ClassDeclExtends(variable1,variable2,al,bl);}
       break;
     default:
       jj_la1[9] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
   final public void nt_FieldDecl() throws ParseException {
-    nt_Type();
-    jj_consume_token(ID);
+  Type a;
+  String b;
+    a = nt_Type();
+    b = jj_consume_token(ID);
     jj_consume_token(SEMI);
+    {if (true) return new FieldDecl(a,b);}
   }
 
   final public void nt_MethodDecl() throws ParseException {
@@ -326,11 +350,15 @@
     }
   }
 
-  final public void nt_ProcDecl() throws ParseException {
+  final public ProcDecl nt_ProcDecl() throws ParseException {
+  String a;
+  FormalList b;
+  Statement c;
+  List<Statement> cl;
     jj_consume_token(PROC);
-    jj_consume_token(ID);
+    a = jj_consume_token(ID);
     jj_consume_token(OPENB);
-    nt_FormalList();
+    b = nt_FormalList();
     jj_consume_token(CLOSEB);
     jj_consume_token(OPENCBR);
     label_8:
@@ -358,9 +386,12 @@
         jj_la1[11] = jj_gen;
         break label_8;
       }
-      nt_Statement();
+      c = nt_Statement();
+                                                                                   cl.add(c);
     }
     jj_consume_token(CLOSECBR);
+   {if (true) return new ProcDecl(a,b,cl);}
+    throw new Error("Missing return statement in function");
   }
 
   final public void nt_FunDecl() throws ParseException {
@@ -404,48 +435,76 @@
     jj_consume_token(CLOSECBR);
   }
 
-  final public void nt_FormalList() throws ParseException {
-    nt_Type();
-    jj_consume_token(ID);
-    label_10:
-    while (true) {
-      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case COMMA:
-        ;
-        break;
-      default:
-        jj_la1[13] = jj_gen;
-        break label_10;
+  final public List<Formal> nt_FormalList() throws ParseException {
+  Type a;
+  String name;
+  Formal c,d;
+  List<Formal> cl;
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case ARRAYOF:
+    case BOOLEAN:
+    case INT:
+      a = nt_Type();
+      name = jj_consume_token(ID);
+  d = new Formal(a,name);
+  cl.add(d);
+      label_10:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case COMMA:
+          ;
+          break;
+        default:
+          jj_la1[13] = jj_gen;
+          break label_10;
+        }
+        c = nt_FormalRest();
+                         cl.add(c);
       }
-      nt_FormalRest();
+   {if (true) return cl;}
+      break;
+    default:
+      jj_la1[14] = jj_gen;
+      ;
     }
+    throw new Error("Missing return statement in function");
   }
 
-  final public void nt_FormalRest() throws ParseException {
+  final public Formal nt_FormalRest() throws ParseException {
+  String a;
+  Type b;
     jj_consume_token(COMMA);
-    nt_Type();
-    jj_consume_token(ID);
+    b = nt_Type();
+    a = jj_consume_token(ID);
+   {if (true) return new Formal(b,a);}
+    throw new Error("Missing return statement in function");
   }
 
-  final public void nt_Type() throws ParseException {
+  final public Type nt_Type() throws ParseException {
+  Token t;
+  Type xD;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case ARRAYOF:
       jj_consume_token(ARRAYOF);
       jj_consume_token(OPENB);
-      nt_Type();
+      xD = nt_Type();
+                                 {if (true) return new TypeArray(xD);}
       jj_consume_token(CLOSEB);
       break;
     case BOOLEAN:
-      jj_consume_token(BOOLEAN);
+      t = jj_consume_token(BOOLEAN);
+                  {if (true) return new TypeBoolean();}
       break;
     case INT:
-      jj_consume_token(INT);
+      t = jj_consume_token(INT);
+               {if (true) return new TypeInt();}
       break;
     default:
-      jj_la1[14] = jj_gen;
+      jj_la1[15] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
+    throw new Error("Missing return statement in function");
   }
 
   final public void nt_Statement() throws ParseException {
@@ -516,13 +575,13 @@
         jj_consume_token(SEMI);
         break;
       default:
-        jj_la1[15] = jj_gen;
+        jj_la1[16] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
     default:
-      jj_la1[16] = jj_gen;
+      jj_la1[17] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -552,7 +611,7 @@
         ;
         break;
       default:
-        jj_la1[17] = jj_gen;
+        jj_la1[18] = jj_gen;
         break label_11;
       }
       nt_Statement();
@@ -585,13 +644,13 @@
         jj_consume_token(CLOSEB);
         break;
       default:
-        jj_la1[18] = jj_gen;
+        jj_la1[19] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
       break;
     default:
-      jj_la1[19] = jj_gen;
+      jj_la1[20] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -609,13 +668,15 @@
                {if (true) return new ExpTrue();}
       break;
     case FALSE:
-      jj_consume_token(FALSE);
+      t = jj_consume_token(FALSE);
+                {if (true) return new ExpFalse();}
       break;
     case ID:
       nt_Var();
       break;
     case SELF:
-      jj_consume_token(SELF);
+      t = jj_consume_token(SELF);
+              {if (true) return new ExpSelf();}
       break;
     case NEW:
       jj_consume_token(NEW);
@@ -637,7 +698,7 @@
         jj_consume_token(CLOSEB);
         break;
       default:
-        jj_la1[20] = jj_gen;
+        jj_la1[21] = jj_gen;
         jj_consume_token(-1);
         throw new ParseException();
       }
@@ -656,7 +717,7 @@
       jj_consume_token(CLOSEB);
       break;
     default:
-      jj_la1[21] = jj_gen;
+      jj_la1[22] = jj_gen;
       jj_consume_token(-1);
       throw new ParseException();
     }
@@ -681,14 +742,14 @@
           ;
           break;
         default:
-          jj_la1[22] = jj_gen;
+          jj_la1[23] = jj_gen;
           break label_12;
         }
         nt_ExpRest();
       }
       break;
     default:
-      jj_la1[23] = jj_gen;
+      jj_la1[24] = jj_gen;
       ;
     }
   }
@@ -711,7 +772,7 @@
   public Token jj_nt;
   private int jj_ntk;
   private int jj_gen;
-  final private int[] jj_la1 = new int[24];
+  final private int[] jj_la1 = new int[25];
   static private int[] jj_la1_0;
   static private int[] jj_la1_1;
   static {
@@ -719,10 +780,10 @@
       jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0xffffff00,0xffffff00,0xffffff00,0x100,0x400,0xe000,0x300,0xe000,0x300,0x20000800,0x300,0xb7a9e000,0xb7a9e000,0x0,0xe000,0x0,0xb7a9e000,0xb7a9e000,0x400000,0x0,0x8002000,0x97800000,0x0,0x0,};
+      jj_la1_0 = new int[] {0xffffff00,0xffffff00,0xffffff00,0x100,0x400,0xe000,0x300,0xe000,0x300,0x20000800,0x300,0xb7a9e000,0xb7a9e000,0x0,0xe000,0xe000,0x0,0xb7a9e000,0xb7a9e000,0x400000,0x0,0x8002000,0x97800000,0x0,0x0,};
    }
    private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x3ff,0x7f,0x3ff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x290,0x290,0x2,0x0,0x124,0x290,0x290,0x200,0x124,0x0,0x290,0x2,0x2,};
+      jj_la1_1 = new int[] {0x3ff,0x7f,0x3ff,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x290,0x290,0x2,0x0,0x0,0x124,0x290,0x290,0x200,0x124,0x0,0x290,0x2,0x2,};
    }
 
   /** Constructor with InputStream. */
@@ -736,7 +797,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -750,7 +811,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -760,7 +821,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -770,7 +831,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -779,7 +840,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -788,7 +849,7 @@
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 24; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 25; i++) jj_la1[i] = -1;
   }
 
   private Token jj_consume_token(int kind) throws ParseException {
@@ -844,7 +905,7 @@
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 24; i++) {
+    for (int i = 0; i < 25; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

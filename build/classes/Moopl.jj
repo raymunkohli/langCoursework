@@ -182,7 +182,7 @@ public void nt_FunDecl() :
 public void nt_FormalList() :
 {}
 {
-  nt_Type() <ID> (nt_FormalRest())*
+  (nt_Type() <ID> (nt_FormalRest())*)?
 }
 
 public void nt_FormalRest() :
