@@ -55,6 +55,7 @@ TOKEN :
 | <EXPMARK : "!">
 | <FSTOP : ".">
 | <SEMI : ";">
+| <EQUALS: "=">
 
 
 
@@ -138,10 +139,9 @@ public void nt_Program() :
 public void nt_ClassDecl() :
 {}
 { 
- 
-  <CLASS> <ID>
-  ((<OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>)
-  | 
+  
+  <CLASS> <ID> 
+  ((<OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>)|
   (<EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>))
 
   /* example with lookahead
@@ -198,21 +198,26 @@ public void nt_Type() :
   <ARRAYOF><OPENB>(nt_Type())<CLOSEB>
   |<BOOLEAN> 
   |<INT>
+  |<ID>
 }
 
 public void nt_Statement():
 {}
 {
-  (nt_Block()) |
-  (nt_Type() <ID> <SEMI>) |
+  ((nt_Block()) |
   (<IF> <OPENB> nt_Exp() <CLOSEB> <THEN> nt_Block() <ELSE> nt_Block()) |
   (<WHILE> <OPENB> nt_Exp() <CLOSEB> <DO> nt_Block())|
   (<OUTPUT> nt_Exp() <SEMI>)|
-  (nt_PrimaryExp()  
-    (( <OPENSBR> nt_Exp() <CLOSESBR> <OP> nt_Exp() <SEMI> )|
-    (<FSTOP> <ID> <OPENB> nt_ExpList() <CLOSEB> <COMMA>)|
-    (<OP> nt_Exp() <SEMI>))
-    )
+  LOOKAHEAD(2)
+  (nt_Type() <ID> <SEMI>) |
+  LOOKAHEAD(2)
+  (nt_Var() <EQUALS> nt_Exp() <SEMI>)|
+  LOOKAHEAD(2)
+  (nt_PrimaryExp() <FSTOP> <ID> <OPENB> nt_ExpList() <CLOSEB> <SEMI>)|
+  LOOKAHEAD(2)
+  (nt_PrimaryExp() <OPENSBR> nt_Exp() <CLOSESBR> <EQUALS> nt_Exp() <SEMI> )
+  )
+    
 }
 
 public void nt_Block() :
@@ -225,16 +230,14 @@ public void nt_Block() :
 public void nt_Exp() :
 {}
 {
-(nt_PrimaryExp()
-  (<OP> nt_PrimaryExp()|
+nt_PrimaryExp() (
+  (<OP> nt_PrimaryExp())|
   (<OPENSBR> nt_Exp() <CLOSESBR>)|
     (<FSTOP>
-      (<LENGTH>|
-      (<ID> <OPENB> nt_ExpList() <CLOSEB>)
-      )
+      ((<LENGTH>)|
+      (<ID> <OPENB> nt_ExpList() <CLOSEB>))
     )
-  )
-)
+  )?
 
 }
 
@@ -249,8 +252,7 @@ public void nt_PrimaryExp() :
   (<SELF>)|
   (<NEW>
     ((<ARRAYOF><OPENB>nt_Type()<CLOSEB><OPENSBR>nt_Exp()<CLOSESBR>)|
-    (<OBJECT><ID><OPENB>nt_ExpList()<CLOSEB>))
-  )|
+    (<OBJECT><ID><OPENB> nt_ExpList()<CLOSEB>)))|
   (<EXPMARK> nt_PrimaryExp())|
   (<ISNULL> nt_PrimaryExp())|
   (<OPENB> nt_Exp() <CLOSEB>)
@@ -266,7 +268,7 @@ public void nt_Var() :
 public void nt_ExpList() :
 {}
 {
-  (nt_ExpRest() (nt_ExpRest())*)?
+  (nt_Exp() (nt_ExpRest())* )|{}
 }
 
 public void nt_ExpRest() :
