@@ -830,7 +830,7 @@ List<Exp> e = new LinkedList<Exp>();
     case INTEGER_LITERAL:
     case ID:
       b = nt_Exp();
-               a.add(b);
+                a.add(b);
       label_12:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -842,14 +842,14 @@ List<Exp> e = new LinkedList<Exp>();
           break label_12;
         }
         c = nt_ExpRest();
-                                           a.add(c);
+                                            a.add(c);
       }
       break;
     default:
       jj_la1[24] = jj_gen;
 
-   {if (true) return a;}
     }
+   {if (true) return a;}
     throw new Error("Missing return statement in function");
   }
 

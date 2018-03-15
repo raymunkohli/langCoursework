@@ -408,7 +408,7 @@ public List<Exp> nt_ExpList() :
   List <Exp> a = new LinkedList<Exp>();
 }
 {
-  (b=nt_Exp() {a.add(b);} (c=nt_ExpRest() {a.add(c);})*)|{}
+  ((b=nt_Exp() {a.add(b);} (c=nt_ExpRest() {a.add(c);})*)|{})
   {return a;}
 
 }
