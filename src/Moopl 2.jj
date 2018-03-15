@@ -192,89 +192,180 @@ public void nt_FormalRest() :
 }
 
 
-public void nt_Type() :
-{}
+public Type nt_Type() :
+{
+  Type a;
+  Token b;
+}
 { 
-  <ARRAYOF><OPENB>(nt_Type())<CLOSEB>
+  <ARRAYOF><OPENB>(a =nt_Type())<CLOSEB>
+  {return new TypeArray(a);}
   |<BOOLEAN> 
+  {return new TypeBoolean();}
   |<INT>
-  |<ID>
+  {return new TypeInt();}
+  |b = <ID>
+  {return new TypeClassType(b.image);}
 }
 
-public void nt_Statement():
-{}
+public Stm nt_Statement():
 {
-  (nt_Block()) |
-  (<IF> <OPENB> nt_Exp() <CLOSEB> <THEN> nt_Block() <ELSE> nt_Block()) |
-  (<WHILE> <OPENB> nt_Exp() <CLOSEB> <DO> nt_Block())|
-  (<OUTPUT> nt_Exp() <SEMI>)|
+  StmBlock a,b;
+  Exp c,h,i;
+  Type d;
+  Token e;
+  Var f;
+  List<Exp> g = new LinkedList<Exp>();
+}
+{
+  (a =nt_Block() {return a;}) |
+  (<IF> <OPENB> c =nt_Exp() <CLOSEB> <THEN> a =nt_Block() <ELSE> b=nt_Block() 
+  {return new StmIf(c,a,b);})|
+  (<WHILE> <OPENB> c = nt_Exp() <CLOSEB> <DO> a =nt_Block()
+  {return new StmWhile(c,a);})|
+  (<OUTPUT> c=nt_Exp() <SEMI>
+  {return new StmOutput(c);}|
   LOOKAHEAD(2)
-  (nt_Type() <ID> <SEMI>) |
+  (d = nt_Type() e=<ID> <SEMI>
+  {return new StmVarDecl(d,e.image);}) |
   LOOKAHEAD(2)
-  (nt_Var() <EQUALS> nt_Exp() <SEMI>)|
+  (f =nt_Var() <EQUALS> c =nt_Exp() <SEMI>
+  {return new StmAssign(f,c);})|
   LOOKAHEAD(2)
-  (nt_PrimaryExp() <FSTOP> <ID> <OPENB> nt_ExpList() <CLOSEB> <SEMI>)|
+  (c = nt_PrimaryExp() <FSTOP> e=<ID> <OPENB> g =nt_ExpList() <CLOSEB> <SEMI>
+  {return new StmCall(c,e.image,g);})|
   LOOKAHEAD(2)
-  (nt_PrimaryExp() <OPENSBR> nt_Exp() <CLOSESBR> <EQUALS> nt_Exp() <SEMI> )
-  
+  (c = nt_PrimaryExp() <OPENSBR> h=nt_Exp() <CLOSESBR> <EQUALS> i=nt_Exp() <SEMI> 
+  {return new StmArrayAssign(c,h,i);})
+  )
     
 }
 
-public void nt_Block() :
-{}
+public StmBlock nt_Block() :
 {
-  <OPENCBR> (nt_Statement())* <CLOSECBR>
+  Stm a;
+  List<Stm> b = new LinkedList<Stm>();
+}
+{
+  <OPENCBR> (a = nt_Statement() {b.add(a);})* <CLOSECBR>
+  {return StmBlock(b);}
 }
 
 
-public void nt_Exp() :
-{}
+public Exp nt_Exp() :
 {
-nt_PrimaryExp() (
-  (<OP> nt_PrimaryExp())|
-  (<OPENSBR> nt_Exp() <CLOSESBR>)|
+Exp a,c;
+Token b;
+List<Exp> e = new LinkedList<Exp>();
+}
+{
+a = nt_PrimaryExp() 
+(
+  (b= <OP> c= nt_PrimaryExp())
+  {
+    ExpOp.Op theOp;
+    if ("and".equals(b.image)){
+      theOp = ExpOp.Op.AND;
+    }
+    else if ("<".equals(b.image)){
+      theOp = ExpOp.Op.LESSTHAN;
+    }
+    else if ("==".equals(b.image)){
+      theOp = ExpOp.Op.EQUALS;
+    }
+    else if ("div".equals(b.image)){
+      theOp = ExpOp.Op.DIV;
+    }
+    else if ("+".equals(b.image)){
+      theOp = ExpOp.Op.PLUS;
+    }
+    else if ("-".equals(b.image)){
+      theOp = ExpOp.Op.MINUS;
+    }
+    else if ("*".equals(b.image)){
+      theOp = ExpOp.Op.TIMES;
+    }
+    else{
+      theOp = null;
+    }
+    return new ExpOp(a,theOp,c);
+  }
+  |
+  (<OPENSBR> c =nt_Exp() <CLOSESBR>)
+  {return new ExpArrayLookup(a,c);}
+  |
     (<FSTOP>
-      ((<LENGTH>)|
-      (<ID> <OPENB> nt_ExpList() <CLOSEB>))
+      ((<LENGTH>
+      {return new ExpArrayLength(a);})
+      |
+      (b =<ID> <OPENB> e=nt_ExpList() <CLOSEB>
+      {return new ExpCall(a,b.image,e);}))
     )
-  )?
+  | {}{return a;}) 
 
 }
 
 
-public void nt_PrimaryExp() :
-{}
+public Exp nt_PrimaryExp() :
 {
-  (<INTEGER_LITERAL>)|
-  (<TRUE>)|
-  (<FALSE>)|
-  (nt_Var())|
-  (<SELF>)|
+  Token a;
+  Var b;
+  Type c;
+  Exp d;
+  List<Exp> e = new LinkedList<Exp>();
+}
+{
+  (a = <INTEGER_LITERAL>)
+  {return new ExpInteger(Integer.parseInt(a.image));}|
+  (a =<TRUE>)
+  {return new ExpTrue();}|
+  (<FALSE>)
+  {return new ExpFalse();}|
+  b =nt_Var()
+  {return new ExpVar(b);}|
+  (<SELF>)
+  {return new ExpSelf();}|
   (<NEW>
-    ((<ARRAYOF><OPENB>nt_Type()<CLOSEB><OPENSBR>nt_Exp()<CLOSESBR>)|
-    (<OBJECT><ID><OPENB> nt_ExpList()<CLOSEB>)))|
-  (<EXPMARK> nt_PrimaryExp())|
-  (<ISNULL> nt_PrimaryExp())|
-  (<OPENB> nt_Exp() <CLOSEB>)
+    ((<ARRAYOF><OPENB>c = nt_Type()<CLOSEB><OPENSBR>d =nt_Exp()<CLOSESBR>
+    {return new ExpNewArray(c,d);})|
+    (<OBJECT>a =<ID><OPENB> e =nt_ExpList()<CLOSEB>
+    {return new ExpNewObject(a.image,e);})))|
+  (<EXPMARK> d =nt_PrimaryExp()
+  {return new ExpNot(d);})|
+  (<ISNULL> d =nt_PrimaryExp()
+  {return new ExpIsnull(d);})|
+  (<OPENB> d= nt_Exp() <CLOSEB>
+  {return d;})
+  
+}
+
+public Var nt_Var() :
+{
+  Token a;
+}
+{
+  a= <ID>
+  {return new Var(a.image);}
+}
+
+public List<Exp> nt_ExpList() :
+{
+  Exp b,c;
+  List <Exp> a = new LinkedList<Exp>();
+}
+{
+  (b=nt_Exp() {a.add(b);} (c=nt_ExpRest() {a.add(c);})*)|{}
+  {return a;}
 
 }
 
-public void nt_Var() :
-{}
+public Exp nt_ExpRest() :
 {
-  <ID>
+  Exp a;
 }
-
-public void nt_ExpList() :
-{}
 {
-  (nt_Exp() (nt_ExpRest())* )|{}
-}
-
-public void nt_ExpRest() :
-{}
-{
-  <COMMA> nt_Exp()
+  <COMMA> a =nt_Exp()
+  {return a;}
 }
 
 public void eof() :

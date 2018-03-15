@@ -55,6 +55,7 @@ TOKEN :
 | <EXPMARK : "!">
 | <FSTOP : ".">
 | <SEMI : ";">
+| <EQUALS : "=">
 
 
 
@@ -330,7 +331,7 @@ public Var nt_Var() :
 public void nt_ExpList() :
 {}
 {
-  (nt_ExpRest() (nt_ExpRest())*)?
+  (nt_ExpRest() (nt_ExpRest())*| {}
 }
 
 public void nt_ExpRest() :
