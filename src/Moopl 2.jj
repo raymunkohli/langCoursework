@@ -130,19 +130,34 @@ public void testTokens() :
  ************************************/
 
 
-public void nt_Program() :
-{}
+public Program nt_Program() :
 {
-  (nt_ProcDecl())+ (nt_ClassDecl())*
+  ProcDecl a;
+  List<ProcDecl> b = new LinkedList<ProcDecl>();
+  ClassDecl c;
+  List<ClassDecl> d = new LinkedList<ClassDecl>();
+}
+{
+  (a=nt_ProcDecl() { b.add(a);})+ (c=nt_ClassDecl(){d.add(c);})*
+  {return new Program(b,d);}
 }
 
-public void nt_ClassDecl() :
-{}
+public ClassDecl nt_ClassDecl() :
+{
+  Token a,b;
+  FieldDecl c;
+  List<FieldDecl> e = new LinkedList<FieldDecl>();
+  MethodDecl d;
+  List<MethodDecl> f = new LinkedList<MethodDecl>();
+
+}
 { 
   
-  <CLASS> <ID> 
-  ((<OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>)|
-  (<EXTENDS> <ID> <OPENCBR> (nt_FieldDecl())* (nt_MethodDecl())* <CLOSECBR>))
+  <CLASS> a=<ID> 
+  ((<OPENCBR> (c = nt_FieldDecl() {e.add(c);})* (d = nt_MethodDecl(){f.add(d);})* <CLOSECBR>
+  {return new ClassDeclSimple(a.image,e,f);})|
+  (<EXTENDS> b =<ID> <OPENCBR> (c=nt_FieldDecl() {e.add(c);})* (d =nt_MethodDecl(){f.add(d);})* <CLOSECBR>
+  {return new ClassDeclExtends(a.image,b.image,e,f);}))
 
   /* example with lookahead
   LOOKAHEAD(2)
@@ -152,43 +167,82 @@ public void nt_ClassDecl() :
   */
 }
 
-public void nt_FieldDecl() :
-{}
+public FieldDecl nt_FieldDecl() :
+{
+  Type a;
+  Token b;
+}
 { 
-   (nt_Type()) <ID> <SEMI>
+   (a =nt_Type()) b=<ID> <SEMI>
+   {return new FieldDecl(a,b.image);}
 }
 
 
-public void nt_MethodDecl() :
-{}
+public MethodDecl nt_MethodDecl() :
 {
-    nt_ProcDecl() | nt_FunDecl()
+  ProcDecl a;
+  FunDecl b;
+}
+{
+    a = nt_ProcDecl() 
+    {return a;}
+    |b= nt_FunDecl() { return b;}
 }
 
 
-public void nt_ProcDecl() :
-{}
+public ProcDecl nt_ProcDecl() :
 {
-  <PROC><ID><OPENB> nt_FormalList() <CLOSEB><OPENCBR> (nt_Statement())* <CLOSECBR>  
+  Token a;
+  List<Formal> b = new LinkedList<Formal>();
+  Stm c;
+  List<Stm> d = new LinkedList<Stm>();
+
+}
+{
+  <PROC> a =<ID><OPENB> b= nt_FormalList() <CLOSEB><OPENCBR> (c=nt_Statement() {d.add(c);})* <CLOSECBR>  
+{return new ProcDecl(a.image,b,d);}
 }
 
 
-public void nt_FunDecl() :
-{}
+public FunDecl nt_FunDecl() :
 {
-  <FUN> nt_Type() <ID> <OPENB> nt_FormalList() <CLOSEB> <OPENCBR> (nt_Statement())* <RETURN> nt_Exp() <SEMI> <CLOSECBR>
+  Type a;
+  Token b;
+  List<Formal> c = new LinkedList<Formal>();
+  Stm d;
+  List<Stm> e = new LinkedList<Stm>();
+  Exp f;
 }
 
-public void nt_FormalList() :
-{}
 {
-  (nt_Type() <ID> (nt_FormalRest())*)?
+  <FUN> a =nt_Type() b =<ID> 
+  <OPENB> c=nt_FormalList() <CLOSEB> <OPENCBR> 
+  (d = nt_Statement(){e.add(d);})* <RETURN> f =nt_Exp() <SEMI> <CLOSECBR>
+  {return new FunDecl(a,b.image,c,e,f);}
 }
 
-public void nt_FormalRest() :
-{}
+public List<Formal> nt_FormalList() :
 {
-  <COMMA> nt_Type() <ID>
+  List<Formal> a = new LinkedList<Formal>();
+  Type b;
+  Token c;
+  Formal d,e;
+}
+{
+  (b =nt_Type() c =<ID> {a.add(new Formal(b,c.image));} 
+  (d = nt_FormalRest() {a.add(d);})*)?
+
+  {return a;}
+}
+
+public Formal nt_FormalRest() :
+{
+  Type a;
+  Token b;
+}
+{
+  <COMMA> a =nt_Type() b=<ID>
+  {return new Formal(a,b.image);}
 }
 
 
@@ -244,11 +298,11 @@ public Stm nt_Statement():
 public StmBlock nt_Block() :
 {
   Stm a;
-  List<Stm> b = new LinkedList<Stm>();
+  List<Stm> ab = new LinkedList<Stm>();
 }
 {
-  <OPENCBR> (a = nt_Statement() {b.add(a);})* <CLOSECBR>
-  {return StmBlock(b);}
+  <OPENCBR> (a = nt_Statement() {ab.add(a);})* <CLOSECBR>
+  {return new StmBlock(ab);}
 }
 
 
